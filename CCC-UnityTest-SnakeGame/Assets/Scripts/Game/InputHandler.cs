@@ -13,13 +13,16 @@ public class InputHandler : MonoBehaviour {
     float swipeDistanceThreshold;
     float swipeTimeThreshold;
 
+    //when not in use, comment it's usage
     public Text debugText;
 
     void Awake()
     {
+        //wait update function, untill I tell you when to move
         enabled = false;
     }
 
+    //command pattern news a reciver to send commands to.
     internal void Init(SnakeHead head)
     {
         player = head;
@@ -44,6 +47,7 @@ public class InputHandler : MonoBehaviour {
     {
         if (Input.touchCount > 0)
         {
+            //TODO: handle multitouch case
             Touch touch = Input.touches[0];
             if(touch.phase == TouchPhase.Began)
             {
@@ -58,7 +62,7 @@ public class InputHandler : MonoBehaviour {
                 float distanceMoved = subVector.magnitude;
                 double AngleOfMovemnt = Math.Atan2(subVector.y, subVector.x) * Mathf.Rad2Deg;
 
-                //debugText.text = (AngleOfMovemnt)+ " ˚";
+                //use vector direction to predect the diriction of a touch
                 if (AngleOfMovemnt > -45 && AngleOfMovemnt < 45)
                     right.Execute(player);
                 else if (AngleOfMovemnt >= 45 && AngleOfMovemnt < 135)
@@ -73,6 +77,7 @@ public class InputHandler : MonoBehaviour {
         }
     }
 
+    //TODO add #if UnityEditor directive notaion
     private void HandleInputs()
     {
         //TODO:use touch swipes

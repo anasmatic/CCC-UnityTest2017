@@ -8,6 +8,10 @@ public class SnakeHead : BaseBodyPart {
     public LayerMask wallsLayer;
     public LayerMask playerLayer;
 
+    /*
+    //using OnTriggerEnter or OnCollisionEnter is not the best way to trigger collision in "step base movment"
+    //it is better to raycast/linecast the next move position, and see if it is allowed
+    //this way we will have pre collision system, we can make use of it when we add more features ot the game
     void OnTriggerEnter(Collider other)
     {
         //Destroy(other.gameObject);
@@ -16,14 +20,16 @@ public class SnakeHead : BaseBodyPart {
     {
         print("COLLISION");
     }
+    */
 
+        //init but don't move yet
     internal void Init(int direction)
     {
         this.direction = direction;
         lastPossition = transform.position;
         RotateToDirection();
     }
-
+    //the head has eyes, and though eye should be always infront
     private void RotateToDirection()
     {
         transform.rotation = Quaternion.identity;
@@ -31,6 +37,8 @@ public class SnakeHead : BaseBodyPart {
         transform.Rotate( rot.x,rot.y,rot.z);
     }
 
+    //update function can be replaced later with a (tick) function,
+    //something like StartCoroutine , that handels smooth animation for the snake
     internal override void Update()
     {
         timeCounter++;
@@ -44,10 +52,9 @@ public class SnakeHead : BaseBodyPart {
         }
     }
 
+    //this function translates directon to actual position
     public override void MovementHandler()
     {
-        //check before move for collision
-        
         switch (direction)
         {
             case Constants.LEFT:
@@ -67,14 +74,14 @@ public class SnakeHead : BaseBodyPart {
                 break;
         }
 
+        //check before move for collision
         if (CanMove()){
             //TODO:animate movement using currenPossition
             transform.localPosition = newPossition;
             RotateToDirection();
             base.MovementHandler();
         }else {
-            //TODO: dead eefect or animation
-            //TODO: event trigger to Game handler, that you are dead
+            //TODO: dead effect or animation
         }
     }
 
@@ -95,18 +102,15 @@ public class SnakeHead : BaseBodyPart {
         newPossition.z--;
     }
 
+
     private bool CanMove()
     {
         //if (now)
         timeCounter = 0;// Constants.TICK_SPEED;
-        
         lastPossition = transform.localPosition;
 
         if(CheckIfTHisMoveLeadToHit( newPossition))
         {
-            //TODO: can't move, die mother fucker
-            print("CheckIfTHisMoveLeadToHit TRUE");
-            print("________________ GameOVer __________________");
             EventManager.TriggerEvent(EventManager.GAME_OVER);
             enabled = false;
             return false;
@@ -116,21 +120,14 @@ public class SnakeHead : BaseBodyPart {
 
     private bool CheckIfTHisMoveLeadToHit(Vector3 newPossition)
     {
-        RaycastHit hit;
-        //print(transform.position + " , " + transform.TransformPoint(newPossition));
-        //Debug.DrawLine(transform.position, transform.TransformPoint(newPossition), Color.cyan,1);
-        //LineCast works in World positions, so we need to convert the local point newPosition to world
-        //bool isHit = Physics.Linecast(transform.TransformPoint(transform.localPosition), transform.TransformPoint(newPossition), out hit, wallsLayer);
-        //print(newPossition+ ","+ ((hit.collider != null)?hit.collider.name:"null"));
         Vector3 directionAsVector = GetDirectionAsVector();
-            
-            //Vector3.forward; ;
-        
-        Debug.DrawRay(transform.position, directionAsVector, Color.cyan, 1);
+        //Debug.DrawRay(transform.position, directionAsVector, Color.cyan, 1);
+        //check for collision with walls and player
         bool isHit = Physics.Raycast(transform.position, directionAsVector, 1, wallsLayer|playerLayer);
         return isHit;
     }
 
+    //translate string const direction to basic vector direction
     private Vector3 GetDirectionAsVector()
     {
         Vector3 directionAsVector = Vector3.forward; ;
@@ -157,6 +154,7 @@ public class SnakeHead : BaseBodyPart {
         return directionAsVector;
     }
 
+    //helper to rotate the head
     private Vector3 GetRotationVectorWithRespectToDirection()
     {
         Vector3 directionAsVector = Vector3.zero;

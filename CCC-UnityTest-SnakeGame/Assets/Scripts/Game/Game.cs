@@ -62,21 +62,18 @@ public class Game : MonoBehaviour,IObserver {
 		
 	}
 
+    //got a message from the frout factory
     public void Notify()
     {
         StopAllCoroutines();
-
         StartCoroutine(FruitFactoryCoroutine());
     }
 
     public void NotifyWith(Vector3 position1, Vector3 position2){}
 
-    internal void Pause()
-    {
-        
-    }
+    internal void Pause(){}
 
-
+    //stop function update of game objects, hault factories, and clean the pool !
     private void OnGameOverHandler()
     {
         snake.enabled = false;

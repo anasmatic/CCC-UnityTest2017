@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+//manage ui
 public class Menu : MonoBehaviour {
     public Button playButton;
     public Text statusText;

@@ -5,7 +5,7 @@ using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
-[assembly: InternalsVisibleTo("GetValedPositionTest1")]
+//C# Singleton
 public class Map : IObserver
 {
     System.Random rand;
@@ -124,6 +124,8 @@ public class Map : IObserver
         instance = null;
     }
 }
+
+
 
 //replica of same logic in Map class to test the private functions that returns available postition to new fruit
 public class MapForTest

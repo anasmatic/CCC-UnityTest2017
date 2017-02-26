@@ -8,6 +8,7 @@ public class MainManger : MonoBehaviour {
     public Game game;
     public Menu menu;
     private Command initGame, playGame, pause;
+    
     // Use this for initialization
     void Start () {
         initGame = new InitGameCommand();

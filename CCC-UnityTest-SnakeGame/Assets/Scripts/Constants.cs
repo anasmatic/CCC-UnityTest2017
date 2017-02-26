@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+//Game Settings
 public class Constants : MonoBehaviour {
 
     public static int TICK_SPEED = 10;
