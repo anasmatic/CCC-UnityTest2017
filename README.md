@@ -42,5 +42,10 @@ Some developers think Singleton is the pure evil of the patterns world ! , but a
 Important pattern , Used to notify the snake that it eat a fruit and should grow !
 we can do that without keeping a reference of the player in every enemy by using the Observer pattern.
 
+#### UnitTesting private functions ! :
+while I was working on Map class that tracks the snake movement, I found a good reason to use Unit Testing and TDD, as the Map class is responsible of helping the FruitsFactory to create a Fruit that won't overlaps snake body.
+that is when I used a technique to test private methods, by creating a hidden class inside the Map class file, and this hidden class will have the same private functions logic I want to test, but in public functions.
+
+
 ### Finally I hope you find my code as a good representation of my programming skills,
 
