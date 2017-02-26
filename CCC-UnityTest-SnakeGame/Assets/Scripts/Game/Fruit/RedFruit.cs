@@ -12,7 +12,7 @@ public class RedFruit : BaseFruit {
         base.OnEnable();
     }
 
-    // Update is called once per frame
+    // unique animation of the red fruit !
     public override void animate()
     {
         transform.localPosition = startPos + new Vector3(0.0f, Mathf.Sin(Time.time)*.5f, 0.0f);

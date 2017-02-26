@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class BaseFruit : MonoBehaviour,IFruit, IObservable
 {
+    //cooldown and life time
     public int lifeTime = 0;
     private List<IObserver> observers = new List<IObserver>();
     protected Vector3 startPos;
@@ -14,7 +15,8 @@ public class BaseFruit : MonoBehaviour,IFruit, IObservable
         startPos = transform.localPosition;
         Invoke("DestroyMe", lifeTime);
     }
-
+    
+    #region IObservable
     public void Subscribe(IObserver observer)
     {
         observers.Add(observer);
@@ -29,6 +31,7 @@ public class BaseFruit : MonoBehaviour,IFruit, IObservable
         observers.Remove(observer);
     }
 
+    //this is not a IObservable, that is Unity function
     void OnTriggerEnter(Collider other)
     {
         gameObject.SetActive(false);
@@ -39,17 +42,17 @@ public class BaseFruit : MonoBehaviour,IFruit, IObservable
                 observer.Notify();
         }
     }
-
-    public virtual void animate()
-    {
-
-    }
+    #endregion
 
     public void DestroyMe()//I don't want this to be overriden
     {
         gameObject.SetActive(false);
     }
-    // Update is called once per frame
+
+
+    //every fruit should have its own animation in it class
+    public virtual void animate() { }
+    // no need to override update in children, just override animate()
     void Update()
     {
         animate();

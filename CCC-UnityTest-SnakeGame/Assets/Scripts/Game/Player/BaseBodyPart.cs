@@ -51,23 +51,26 @@ public class BaseBodyPart : MonoBehaviour, ISnakeBodyPart,IObservable
         if (observers != null)
         {
             foreach (var observer in observers)
-                //observer.NotifyWith(transform.TransformPoint(newPossition), transform.TransformPoint(lastPossition));
                 observer.NotifyWith(newPossition, lastPossition);
         }
         if (nextPart)
             nextPart.MovementHandler();
     }
 
+    #region Linked List helper
+    //the part infront of me (to head direction)
     internal void SetPreviousPart(BaseBodyPart snakeBodyPart)
     {
         previousPart = snakeBodyPart;
     }
-
+    //the part behind me (to tail direction)
     public virtual void SetNextPart(BaseBodyPart snakeBodyPart)
     {
         nextPart = snakeBodyPart;
     }
+    #endregion
 
+    #region IObservable
     public void Subscribe(IObserver observer)
     {
         observers.Add(observer);
@@ -76,6 +79,7 @@ public class BaseBodyPart : MonoBehaviour, ISnakeBodyPart,IObservable
     public void Subscribe(IObserver[] observer){}
 
     public void Unsubscribe(IObserver observer){}
+    #endregion
 
     /*
     works from head to tail

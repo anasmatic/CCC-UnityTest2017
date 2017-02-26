@@ -11,9 +11,9 @@ public class Snake : MonoBehaviour , IObserver{
 
     public SnakeBodyPart bodyPartPrefab;
     public SnakeHead headPrefab;
-
+    //the mind of the hero !
     private SnakeHead head;
-    public const int maxLength = 10;//populatedfrom Level class, it is as same as the number of collectables in this class + 3(initial pody parts)
+    public const int maxLength = 10;//should be populated from Level class, it is as same as the number of collectables in this class + 3(initial pody parts)
 
 
     internal void Clear()

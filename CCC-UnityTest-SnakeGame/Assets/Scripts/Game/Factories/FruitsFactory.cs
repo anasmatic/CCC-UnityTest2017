@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class FruitsFactory : MonoBehaviour {
 
+    //Singleton
     private static FruitsFactory instance;
     public static FruitsFactory Instance
     {
@@ -22,14 +23,14 @@ public class FruitsFactory : MonoBehaviour {
 
     private  bool isActive;
     
-
+    //create and add to empty pos, and return the cooldown time of the fruit
     public int CreateFruit (int columns, int rows, SnakeHead snakeHead) {
-    //TODO: make sure it won't laps the snake
+    
         BaseFruit fruit = FruitsPool.Instance.GetFruitFromPool();
         if (fruit)
         {
             Vector3 pos = Map.Instance.GetValedPosition();
-            //pos = new Vector3(Random.Range(1, columns-1), 0, Random.Range(1, rows-1)*-1);
+            
             fruit.transform.localPosition = pos;
             fruit.gameObject.SetActive(true);
             return fruit.lifeTime;
@@ -44,6 +45,7 @@ public class FruitsFactory : MonoBehaviour {
     internal void ResumeProduction()
     {
         isActive = true;
+        //used on game over, because this game has no pause button !
         FruitsPool.Instance.hideCurrent();
     }
     public bool getIsActive()
