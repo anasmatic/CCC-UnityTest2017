@@ -2,9 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface ISnakeBodyPart{
+namespace Game.Player
+{
+    public interface ISnakeBodyPart
+    {
 
-    void MovementHandler();
-    bool CollideHandler();
-    void DestroyPart();
+        void MovementHandler();
+        bool CollideHandler();
+        void DestroyPart();
+    }
 }

@@ -4,17 +4,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+using Game.Player;
 public class InputHandler : MonoBehaviour {
 
     private Command left, right, top, down;
     private SnakeHead player;
-    float startTime = 0;
     Vector2 swipeStartPos;
     float swipeDistanceThreshold;
     float swipeTimeThreshold;
-
-    //when not in use, comment it's usage
-    public Text debugText;
 
     void Awake()
     {
@@ -51,13 +48,11 @@ public class InputHandler : MonoBehaviour {
             Touch touch = Input.touches[0];
             if(touch.phase == TouchPhase.Began)
             {
-                startTime = Time.time;
                 swipeStartPos = touch.position;
             }
             else if(touch.phase == TouchPhase.Ended)
             {
                 //now we need to know the magnitude and direction of movment , and whether it happens under the threshold time
-                float timeTaken = Time.time - startTime;
                 Vector2 subVector = (touch.position - swipeStartPos);
                 float distanceMoved = subVector.magnitude;
                 double AngleOfMovemnt = Math.Atan2(subVector.y, subVector.x) * Mathf.Rad2Deg;
@@ -77,26 +72,27 @@ public class InputHandler : MonoBehaviour {
         }
     }
 
-    //TODO add #if UnityEditor directive notaion
+#if UNITY_EDITOR
     private void HandleInputs()
     {
         //TODO:use touch swipes
-        if (Input.GetKeyDown(KeyCode.A))
+        if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow))
         {
             left.Execute(player);
         }
-        else if (Input.GetKeyDown(KeyCode.D))
+        else if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
         {
             right.Execute(player);
         }
-        else if (Input.GetKeyDown(KeyCode.S))
+        else if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow))
         {
             down.Execute(player);
         }
-        else if (Input.GetKeyDown(KeyCode.W))
+        else if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow))
         {
             top.Execute(player);
         }
         
     }
+#endif
 }

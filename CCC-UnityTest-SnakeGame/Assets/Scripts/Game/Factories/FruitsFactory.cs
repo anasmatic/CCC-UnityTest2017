@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class FruitsFactory : MonoBehaviour {
 
     //Singleton
@@ -24,7 +25,7 @@ public class FruitsFactory : MonoBehaviour {
     private  bool isActive;
     
     //create and add to empty pos, and return the cooldown time of the fruit
-    public int CreateFruit (int columns, int rows, SnakeHead snakeHead) {
+    public int CreateFruit (int columns, int rows, Game.Player.SnakeHead snakeHead) {
     
         BaseFruit fruit = FruitsPool.Instance.GetFruitFromPool();
         if (fruit)

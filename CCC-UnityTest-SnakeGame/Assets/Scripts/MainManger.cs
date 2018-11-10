@@ -2,21 +2,24 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Game;
 
 public class MainManger : MonoBehaviour {
 
-    public Game game;
-    public Menu menu;
-    private Command initGame, playGame, pause;
-    
-    // Use this for initialization
+    public GameManager game;
+    public MenuView menu;
+    private Command initGame, playGame, pauseGame, resumeGame;
+
     void Start () {
         initGame = new InitGameCommand();
         playGame = new PlayGameCommand();
-        pause = new PauseCommand();
+        pauseGame = new PauseCommand();
+        resumeGame = new ResumeCommand();
 
         EventManager.ListenTo(EventManager.INIT_GAME, OnInitGameHandler);
         EventManager.ListenTo(EventManager.START_GAME, OnStartGameHandler);
+        EventManager.ListenTo(EventManager.PAUSE_GAME, OnPauseGameHandler);
+        EventManager.ListenTo(EventManager.RESUME_GAME, OnResumeGameHandler);
     }
 
     private void OnStartGameHandler()
@@ -29,8 +32,12 @@ public class MainManger : MonoBehaviour {
         initGame.Execute(game);
     }
 
-    // Update is called once per frame
-    void Update () {
-		
-	}
+    private void OnPauseGameHandler()
+    {
+        pauseGame.Execute(game);
+    }
+    private void OnResumeGameHandler()
+    {
+        resumeGame.Execute(game);
+    }
 }

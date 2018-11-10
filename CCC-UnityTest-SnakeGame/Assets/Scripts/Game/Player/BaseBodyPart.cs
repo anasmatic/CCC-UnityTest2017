@@ -3,91 +3,91 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BaseBodyPart : MonoBehaviour, ISnakeBodyPart,IObservable
+namespace Game.Player
 {
-    internal BaseBodyPart previousPart = null;//the part in front of me in the direction to the head
-    internal BaseBodyPart nextPart = null;//the part behind me in the direction to the head
-    internal int timeCounter = 0;
-    internal Vector3 lastPossition;
-    internal Vector3 newPossition;
-    private List<IObserver> observers = new List<IObserver>();
-
-    internal int direction;
-
-    // Use this for initialization
-    internal void Start () {
-        newPossition = lastPossition = transform.localPosition;
-        Subscribe(Map.Instance);
-    }
-	
-	// Update is called once per frame
-	internal virtual void Update () {
-        
-    }
-    /*
-        only head deserves to handle collisions,
-        no other body parts need to .
-    */
-    public virtual bool CollideHandler()
+    public class BaseBodyPart : MonoBehaviour, ISnakeBodyPart, IObservable
     {
-        return false;
-    }
+        internal BaseBodyPart previousPart = null;//the part in front of me in the direction to the head
+        internal BaseBodyPart nextPart = null;//the part behind me in the direction to the head
+        internal int timeCounter = 0;
+        internal Vector3 lastPosition;
+        internal Vector3 newPosition;
+        private List<IObserver> observers = new List<IObserver>();
 
-    /*
-        this function triggerd from Input handler
-    */
-    public virtual void MovementHandler(int direction)
-    {
-        if (Math.Abs(direction) == Math.Abs(this.direction)) return;
+        internal int direction;
 
-        this.direction = direction;
-        MovementHandler();
-    }
-
-    public virtual void MovementHandler()
-    {
-        //do chain reaction along the linked list\
-
-        if (observers != null)
+        // Use this for initialization
+        internal void Start()
         {
-            foreach (var observer in observers)
-                observer.NotifyWith(newPossition, lastPossition);
+            newPosition = lastPosition = transform.localPosition;
+            Subscribe(Map.Instance);
         }
-        if (nextPart)
-            nextPart.MovementHandler();
-    }
 
-    #region Linked List helper
-    //the part infront of me (to head direction)
-    internal void SetPreviousPart(BaseBodyPart snakeBodyPart)
-    {
-        previousPart = snakeBodyPart;
-    }
-    //the part behind me (to tail direction)
-    public virtual void SetNextPart(BaseBodyPart snakeBodyPart)
-    {
-        nextPart = snakeBodyPart;
-    }
-    #endregion
+        /*
+            only head deserves to handle collisions,
+            no other body parts need to .
+        */
+        public virtual bool CollideHandler()
+        {
+            return false;
+        }
 
-    #region IObservable
-    public void Subscribe(IObserver observer)
-    {
-        observers.Add(observer);
-    }
+        /*
+            this function triggerd from Input handler
+        */
+        public virtual void MovementHandler(int direction)
+        {
+            if (Math.Abs(direction) == Math.Abs(this.direction)) return;
 
-    public void Subscribe(IObserver[] observer){}
+            this.direction = direction;
+            MovementHandler();
+        }
 
-    public void Unsubscribe(IObserver observer){}
-    #endregion
+        public virtual void MovementHandler()
+        {
+            //do chain reaction along the linked list\
 
-    /*
-    works from head to tail
-    */
-    public void DestroyPart()
-    {
-        if (nextPart)
-            nextPart.DestroyPart();
-        Destroy(gameObject);
+            if (observers != null)
+            {
+                foreach (var observer in observers)
+                    observer.NotifyWith(newPosition, lastPosition);
+            }
+            if (nextPart)
+                nextPart.MovementHandler();
+        }
+
+        #region Linked List helper
+        //the part infront of me (to head direction)
+        internal void SetPreviousPart(BaseBodyPart snakeBodyPart)
+        {
+            previousPart = snakeBodyPart;
+        }
+        //the part behind me (to tail direction)
+        public virtual void SetNextPart(BaseBodyPart snakeBodyPart)
+        {
+            nextPart = snakeBodyPart;
+        }
+        #endregion
+
+        #region IObservable
+        public void Subscribe(IObserver observer)
+        {
+            observers.Add(observer);
+        }
+
+        public void Subscribe(IObserver[] observer) { }
+
+        public void Unsubscribe(IObserver observer) { }
+        #endregion
+
+        /*
+        works from head to tail
+        */
+        public void DestroyPart()
+        {
+            if (nextPart)
+                nextPart.DestroyPart();
+            Destroy(gameObject);
+        }
     }
 }

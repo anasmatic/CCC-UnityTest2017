@@ -1,7 +1,7 @@
 ﻿
-public class PlayGameCommand : Command {
+public class ResumeCommand : Command {
     public override void Execute(Game.GameManager game)
     {
-        game.StartGame();
+        game.Resume();
     }
 }
