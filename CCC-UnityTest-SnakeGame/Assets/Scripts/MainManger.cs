@@ -3,41 +3,51 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Game;
+using Ui;
 
 public class MainManger : MonoBehaviour {
 
-    public GameManager game;
-    public MenuView menu;
-    private Command initGame, playGame, pauseGame, resumeGame;
+    public GamePlayManager game;
 
-    void Start () {
-        initGame = new InitGameCommand();
-        playGame = new PlayGameCommand();
-        pauseGame = new PauseCommand();
-        resumeGame = new ResumeCommand();
+    private Command initGameCommand, playGameCommand, pauseGameCommand, resumeGameCommand, gameOverCommand;
 
+    void Awake () {
+        //setup Commands
+        initGameCommand = new InitGameCommand();
+        playGameCommand = new PlayGameCommand();
+        pauseGameCommand = new PauseCommand();
+        resumeGameCommand = new ResumeCommand();
+        gameOverCommand = new CameOverCommand();
+        
+        //listen to main events in the game
         EventManager.ListenTo(EventManager.INIT_GAME, OnInitGameHandler);
         EventManager.ListenTo(EventManager.START_GAME, OnStartGameHandler);
         EventManager.ListenTo(EventManager.PAUSE_GAME, OnPauseGameHandler);
         EventManager.ListenTo(EventManager.RESUME_GAME, OnResumeGameHandler);
+        EventManager.ListenTo(EventManager.GAME_OVER, OnGameOverHandler);
     }
 
+
+    //Events Listeners : they handle events by executing the corrolated Command
+    //all commands are handled in GamePlayManager 
     private void OnStartGameHandler()
     {
-        playGame.Execute(game);
+        playGameCommand.Execute(game);
     }
-
     private void OnInitGameHandler()
     {
-        initGame.Execute(game);
+        initGameCommand.Execute(game);
     }
-
     private void OnPauseGameHandler()
     {
-        pauseGame.Execute(game);
+        pauseGameCommand.Execute(game);
     }
     private void OnResumeGameHandler()
     {
-        resumeGame.Execute(game);
+        resumeGameCommand.Execute(game);
+    }
+    private void OnGameOverHandler()
+    {
+        gameOverCommand.Execute(game);
     }
 }

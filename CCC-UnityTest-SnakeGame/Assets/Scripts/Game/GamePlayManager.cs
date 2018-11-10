@@ -6,22 +6,10 @@ using UnityEngine.UI;
 namespace Game
 {
     using Player;
-    public class GameManager : MonoBehaviour, IObserver
+    public class GamePlayManager : MonoBehaviour, IObserver
     {
-
-        // Use this for initialization
         public Snake snake;
-        public Text countDownText;
         public InputHandler inputHandler;
-        public GameObject fruitsContainer;
-
-
-        //private string[] contDownStrings = {"READY!","SET!","GO!"};
-
-        void Start()
-        {
-            EventManager.ListenTo(EventManager.GAME_OVER, OnGameOverHandler);
-        }
 
         internal void Init()
         {
@@ -30,7 +18,6 @@ namespace Game
             snake.Init(width, height);
         }
 
-        //TODO: to Level
         int width = 20;
         int height = 20;
         internal void StartGame()
@@ -80,21 +67,19 @@ namespace Game
 
         internal void Pause()
         {
-            print("pause");
             Time.timeScale = 0;
             FruitsFactory.Instance.StopProduction();
             snake.StopMovement();
         }
         internal void Resume()
         {
-            print("resume");
             Time.timeScale = 1;
             FruitsFactory.Instance.ResumeProduction();
             snake.ResumeMovement();
         }
 
         //stop function update of game objects, hault factories, and clean the pool !
-        private void OnGameOverHandler()
+        internal void GameOver()
         {
             snake.enabled = false;
             snake.GetHead().enabled = false;

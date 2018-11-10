@@ -1,6 +1,6 @@
 ﻿
 public class PauseCommand : Command {
-    public override void Execute(Game.GameManager game)
+    public override void Execute(Game.GamePlayManager game)
     {
         game.Pause();
     }

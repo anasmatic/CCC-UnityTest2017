@@ -1,7 +1,7 @@
 ﻿
-public class InitGameCommand : Command {
+public class CameOverCommand : Command {
     public override void Execute(Game.GamePlayManager game)
     {
-        game.Init();
+        game.GameOver();
     }
 }
