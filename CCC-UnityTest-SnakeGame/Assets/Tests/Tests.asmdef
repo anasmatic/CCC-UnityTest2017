@@ -1,0 +1,12 @@
+{
+    "name": "Tests",
+    "references": [
+        "SnakeGameClasses"
+    ],
+    "optionalUnityReferences": [
+        "TestAssemblies"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false
+}
