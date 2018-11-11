@@ -128,35 +128,3 @@ public class Map : IObserver
     }
 
 }
-
-
-
-//replica of same logic in Map class to test the private functions that returns available position to new fruit
-public class MapForTest
-{
-    
-    public static void GetRandomBlock_Test(out int blockX, out int blockY)
-    {
-        System.Random rand = new System.Random();
-        blockX = rand.Next(0, 2);//return 0 or 1
-        blockY = rand.Next(0, 2);//return 0 or 1
-    }
-    //same function in Map but change the params to be easier for testing
-    public static void GetRandomIndex_Test(out int X, out int Y, int blockX, int blockY, int width, int height)
-    {
-        System.Random rand = new System.Random();
-        
-        X = rand.Next(GetBlockFirstCell_Test(width, blockX), GetBlockLastCell_Test(width, blockX));
-        Y = rand.Next(GetBlockFirstCell_Test(height, blockY), GetBlockLastCell_Test(height, blockY));
-    }
-
-    public static int GetBlockFirstCell_Test(int total, int blockIndex)
-    {
-        return blockIndex * (int)(total * .5);
-    }
-    public static int GetBlockLastCell_Test(int total, int blockIndex)
-    {
-        float half = total * .5f;
-        return (int) (half + (blockIndex * half));
-    }
-}

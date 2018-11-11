@@ -15,7 +15,6 @@ public class GamePlayTests {
         pool.ConstructForUnityTest(poolSize);
         //init pool, with dummy data
         pool.InitPool( new IObserver[]{} );
-        Debug.Log(poolSize+" vs "+ pool.pool.Count);
         // Use the Assert class to test conditions.
         Assert.AreEqual(poolSize, pool.pool.Count);
         // yield to skip a frame
