@@ -36,16 +36,15 @@ It may look strange that a Factory would produce 1 fruit every 5 seconds ! , but
 one of the most essential techniques in games development is to use pools to avoid creating and destroying object, because the creation and destruction of objects is expensive in matters of performance.
 
 #### Singletons :
-Some developers think Singleton is the pure evil of the patterns world ! , but actually it is a great help when we want to communicate with tight coupled classes, like Factory that takes from a pool.
+Some developers think Singleton is the pure evil of the patterns world ! , but actually it is a great help when we want to communicate with tight coupled classes, like Map.
 
 #### Observers Of the Observable :
 Important pattern , Used to notify the snake that it eat a fruit and should grow !
 we can do that without keeping a reference of the player in every enemy by using the Observer pattern.
 
-#### UnitTesting private functions ! :
-while I was working on Map class that tracks the snake movement, I found a good reason to use Unit Testing and TDD, as the Map class is responsible of helping the FruitsFactory to create a Fruit that won't overlaps snake body.
-that is when I used a technique to test private methods, by creating a hidden class inside the Map class file, and this hidden class will have the same private functions logic I want to test, but in public functions.
+#### UnityTest ! :
+While I was working on Map class, I found a good reason to use TDD, as the Map class is responsible of helping the FruitsFactory to create a Fruit that won't overlaps snake body.
+Also test unit was set to test pool size count.
 
-
-### Finally I hope you find my code as a good representation of my programming skills,
+### Finally, I hope you find my code as a good representation of my programming skills,
 
