@@ -27,7 +27,7 @@ namespace Ui
         void Start()
         {
             //init default values
-            statusText.text = "0";
+            statusText.text = "";
 
             //assign button listeners, every listener will trigger an action that will be received at MenuController
             playButton.onClick.AddListener(OnPlayBtnClick);
@@ -75,7 +75,7 @@ namespace Ui
             //InitGame event view changes, (init game is when the game is setup and ready to run, but didn't start the play yet)
         internal void OnInitGameHandler()
         {
-            statusText.text = "0";
+            statusText.text = "";
             pauseButton.gameObject.SetActive(true);
         }
         
