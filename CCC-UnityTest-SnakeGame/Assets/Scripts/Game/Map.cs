@@ -35,7 +35,24 @@ public class Map : IObserver
         //PrintMap();
     }
 
-    private void PrintMap()
+    public void NotifyWith(Vector3 incomingPos, Vector3 lastPos)
+    {
+        //Debug.Log("lastPos: " + (int)lastPos.z + "," + (int)lastPos.x);
+        //Debug.Log("incomingPos: " + (int)incomingPos.z + "," + (int)incomingPos.x);
+
+        map[map.Length - (int)lastPos.z][(int)lastPos.x] = 0;
+        map[map.Length - (int)incomingPos.z][(int)incomingPos.x] = 1;
+
+        //PrintMap();
+    }
+
+    public void Notify(){}
+
+    public int[][] GetMapNow(){
+        return map;
+    }
+    
+    public void PrintMap()
     {
         string arr = "";
         for (int i = 0; i < map.Length; i++)
@@ -48,7 +65,12 @@ public class Map : IObserver
         UnityEngine.Debug.Log("arr w:" + map[0].Length + "*h" + map.Length + ":\n" + arr);
     }
 
-    internal Vector3 GetValedPosition()
+    // this is root level singleton class, it won't be destroyed with scene change,
+    // it might be useful for game general settings more than map tracking, but this is an example of what it can do
+    public void DeleteSingleton() {
+        instance = null;
+    }
+    public Vector3 GetValidPosition()
     {
         //first choose a random block;
         /*
@@ -67,7 +89,7 @@ public class Map : IObserver
         GetRandomIndex(ref blockX, ref blockY);
         //UnityEngine.Debug.Log("blockX:" + blockX + ", blockY:" + blockY);
         if (map[blockX][blockY] > 0)//is blocked
-            return GetValedPosition();//go recursive !
+            return GetValidPosition();//go recursive !
 
         return new Vector3(blockX, 0, blockY);
     }
@@ -105,29 +127,11 @@ public class Map : IObserver
         return returnValue;
     }
 
-    public void NotifyWith(Vector3 incomingPos, Vector3 lastPos)
-    {
-        //Debug.Log("lastPos: " + (int)lastPos.z + "," + (int)lastPos.x);
-        //Debug.Log("incomingPos: " + (int)incomingPos.z + "," + (int)incomingPos.x);
-
-        map[map.Length - (int)lastPos.z][(int)lastPos.x] = 0;
-        map[map.Length - (int)incomingPos.z][(int)incomingPos.x] = 1;
-
-        //PrintMap();
-    }
-
-    public void Notify(){}
-
-    // this is root level singlton class, it won't be distroyed with scene change,
-    // it might be useful for game genral settings more than map tracking, but this is an example of what it can do
-    public void DeleteSingleton() {
-        instance = null;
-    }
 }
 
 
 
-//replica of same logic in Map class to test the private functions that returns available postition to new fruit
+//replica of same logic in Map class to test the private functions that returns available position to new fruit
 public class MapForTest
 {
     
@@ -137,7 +141,7 @@ public class MapForTest
         blockX = rand.Next(0, 2);//return 0 or 1
         blockY = rand.Next(0, 2);//return 0 or 1
     }
-    //same function in Map but chnage the params to be easier for testing
+    //same function in Map but change the params to be easier for testing
     public static void GetRandomIndex_Test(out int X, out int Y, int blockX, int blockY, int width, int height)
     {
         System.Random rand = new System.Random();

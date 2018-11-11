@@ -6,48 +6,42 @@ using UnityEngine;
 
 public class FruitsFactory : MonoBehaviour {
 
-    //Singleton
-    private static FruitsFactory instance;
-    public static FruitsFactory Instance
+    public FruitsPool pool;
+    private bool isActive;
+    void Awake(){
+        //avoid null error
+        if(pool == null)
+            pool = GetComponent<FruitsPool>();
+    }
+    //init factory, this is coming from GamePlayManager.StartGame
+    internal void init(IObserver[] observers)
     {
-        get
-        {
-            if (instance == null)
-                instance = FindObjectOfType(typeof(FruitsFactory)) as FruitsFactory;
-
-            if (instance == null) //still null ?!
-                throw new System.NullReferenceException("FruitsFactory need to be added to game object on scene");
-
-            return instance;
-        }
+        //init pool, pass the observers that fruits will subscribe to.
+        pool.InitPool(observers);
     }
 
-    private  bool isActive;
-    
     //create and add to empty pos, and return the cooldown time of the fruit
-    public int CreateFruit (int columns, int rows, Game.Player.SnakeHead snakeHead) {
-    
-        BaseFruit fruit = FruitsPool.Instance.GetFruitFromPool();
-        if (fruit)
-        {
-            Vector3 pos = Map.Instance.GetValedPosition();
-            
-            fruit.transform.localPosition = pos;
-            fruit.gameObject.SetActive(true);
-            return fruit.lifeTime;
-        }
-        return 1;
+    public BaseFruit CreateFruit (int columns, int rows, Game.Player.SnakeHead snakeHead, Vector3 pos , out int waitTime) {
+        pool.hideCurrent();
+        BaseFruit fruit = pool.GetFruitFromPool(); 
+        fruit.transform.localPosition = pos;
+        waitTime = fruit.lifeTime;
+        fruit.gameObject.SetActive(true);
+
+        return fruit;
     }
 
+    //deactivate factory, deactivate current fruit from pool
     internal void StopProduction()
     {
         isActive = false;
+        pool.PauseCurrent();
     }
+    //activate factory, activate current fruit from pool
     internal void ResumeProduction()
     {
         isActive = true;
-        //used on game over, because this game has no pause button !
-        FruitsPool.Instance.hideCurrent();
+        pool.ResumeCurrent();
     }
     public bool getIsActive()
     {

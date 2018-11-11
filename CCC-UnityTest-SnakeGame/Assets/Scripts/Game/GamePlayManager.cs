@@ -8,8 +8,15 @@ namespace Game
     using Player;
     public class GamePlayManager : MonoBehaviour, IObserver
     {
+        //hero script reference
         public Snake snake;
+        //user input handler reference
         public InputHandler inputHandler;
+        //fruits factory script reference
+        public FruitsFactory fruitsFactory;
+
+        int width = 20;
+        int height = 20;
 
         internal void Init()
         {
@@ -17,9 +24,6 @@ namespace Game
 
             snake.Init(width, height);
         }
-
-        int width = 20;
-        int height = 20;
         internal void StartGame()
         {
             var head = snake.GetHead();
@@ -27,36 +31,37 @@ namespace Game
             Map.Instance.InitMap(width, height);
             //init input
             inputHandler.Init(head);
-            //init camera
-            //Camera.main.GetComponent<CameraFollowPlayerHandler>().SetHeroToFollow(head.gameObject);
+        
             //init fruits pool, and send the snake to subscribe the fruit collision trigger
-            FruitsPool.Instance.InitPool(new IObserver[] { snake, this });
+            //FruitsPool.Instance.InitPool(new IObserver[] { snake, this });
+            fruitsFactory.init(new IObserver[] { snake, this });
             //start factory
-            FruitsFactory.Instance.ResumeProduction();
+            fruitsFactory.ResumeProduction();
             StartCoroutine(FruitFactoryCoroutine());
             //activate snake
             head.enabled = true;
             snake.ResumeMovement();
         }
 
-
         private IEnumerator FruitFactoryCoroutine()
         {
-            if (FruitsFactory.Instance.getIsActive())
+            while(fruitsFactory.getIsActive())
             {
-                int waitTime = FruitsFactory.Instance.CreateFruit(width, height, snake.GetHead());
+                //every fruit has its own wait time, set default as 1 second now, but later fruits factory will decide 
+                int waitTime = 1;
+                //ask factory to create a fruit, show on map in a valid location, and return wait time
+                fruitsFactory.CreateFruit(  width,
+                                            height, 
+                                            snake.GetHead(),
+                                            Map.Instance.GetValidPosition(),
+                                            out waitTime
+                                            );
+                //wait until the fruit disappear before loop again
                 yield return new WaitForSeconds(waitTime);
-                StartCoroutine(FruitFactoryCoroutine());
             }
         }
 
-        // Update is called once per frame
-        void Update()
-        {
-
-        }
-
-        //got a message from the frout factory
+        //got a message from the fruit factory
         public void Notify()
         {
             StopAllCoroutines();
@@ -67,26 +72,30 @@ namespace Game
 
         internal void Pause()
         {
-            Time.timeScale = 0;
-            FruitsFactory.Instance.StopProduction();
+            //Time.timeScale = 0;
+            fruitsFactory.StopProduction();
             snake.StopMovement();
         }
         internal void Resume()
         {
-            Time.timeScale = 1;
-            FruitsFactory.Instance.ResumeProduction();
+            //Time.timeScale = 1;
+            fruitsFactory.ResumeProduction();
             snake.ResumeMovement();
         }
 
-        //stop function update of game objects, hault factories, and clean the pool !
+        //stop function update of game objects, halt factories, and clean the pool !
         internal void GameOver()
         {
+            //disable snake behaviors
             snake.enabled = false;
             snake.GetHead().enabled = false;
+            
+            //disable user input
             inputHandler.enabled = false;
+            
             StopCoroutine(FruitFactoryCoroutine());
-            FruitsFactory.Instance.StopProduction();
-            FruitsPool.Instance.PauseCurrent();
+            //stop production will pause pool behaviors
+            fruitsFactory.StopProduction();
         }
 
     }

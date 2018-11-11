@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public interface IFruit  {
-
-    //I had no better idea to use an interface, I hate interfaces because they force you to public functions!
+    //today it is one type of fruit, later it maybe more with diffrent characteristics
     void animate();
     void DestroyMe();
 }

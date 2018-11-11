@@ -15,36 +15,39 @@ public class BaseFruit : MonoBehaviour,IFruit, IObservable
         startPos = transform.localPosition;
         Invoke("DestroyMe", lifeTime);
     }
-    
+
+    //Observers subscriptions happens upon game pool initialization 
     #region IObservable
     public void Subscribe(IObserver observer)
     {
-        observers.Add(observer);
+        if(observers.Count == 0)
+            observers.Add(observer);
     }
-    public void Subscribe(IObserver[] observers)
+    public void Subscribe(IObserver[] _observers)
     {
-        this.observers.AddRange(observers);
+        if(this.observers.Count == 0){
+            this.observers.AddRange(_observers);
+        }
     }
 
     public void Unsubscribe(IObserver observer)
     {
         observers.Remove(observer);
     }
+    #endregion
 
-    //this is not a IObservable, that is Unity function
+    //on Collision , Notify your observers, 
     void OnTriggerEnter(Collider other)
     {
         gameObject.SetActive(false);
-
         if (observers != null)
         {
             foreach (var observer in observers)
                 observer.Notify();
         }
     }
-    #endregion
 
-    public void DestroyMe()//I don't want this to be overriden
+    public void DestroyMe()
     {
         gameObject.SetActive(false);
     }
