@@ -47,5 +47,4 @@ we can do that without keeping a reference of the player in every enemy by using
 While I was working on Map class, I found a good reason to use TDD, as the Map class is responsible of helping the FruitsFactory to create a Fruit that won't overlaps snake body.
 Also test unit was set to test pool size count.
 
-### Finally, I hope you find my code as a good representation of my programming skills,
 
